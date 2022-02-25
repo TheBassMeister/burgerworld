@@ -1,0 +1,17 @@
+jdbc:
+  driverClassName: org.h2.Driver
+  url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+
+hibernate:
+  dialect: org.hibernate.dialect.H2Dialect
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+  datasource:
+    data: test_data.sql
