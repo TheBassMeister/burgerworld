@@ -7,11 +7,12 @@ optimally run in different services.
 
 ## Technologies used so far
 
-- Spring Boot (Data and Web so far)
+- Spring Boot (Data, Rest and Web so far)
 - Kotlin
 - Maven
 - MySQL as DB
-- H2 for testing
+- H2 as DB for testing
+- Swagger (Open API 3)
 
 ## How to setup and run the application
 
@@ -29,3 +30,18 @@ to be populated, start the application in the dev profile.
 to the DB during testing, will be gone on a restart.
 
 The tests are running using the in-memory H2 database. A MySql database connection will not be needed.
+
+### Rest Endpoints
+Swagger => http://[Your Host:Port]/swagger-ui/index.html
+Burgers => http://[Your Host:Port]/burgers
+Ingredients => http://[Your Host:Port]/ingredients
+
+### Todo for this branch
+- Add HateOAS
+- Add Swagger examples to fix additionalProp issue
+- Optional: Secure non read Rest endpoint
+- Optional: Prepare instructions and try out deploying app in Docker
+
+
+
+

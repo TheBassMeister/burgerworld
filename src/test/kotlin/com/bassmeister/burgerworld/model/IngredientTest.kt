@@ -1,6 +1,5 @@
-package com.bassmeister.burgerworld
+package com.bassmeister.burgerworld.model
 
-import com.bassmeister.burgerworld.model.IngredientType
 import com.bassmeister.burgerworld.repo.IngredientRepo
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

@@ -21,7 +21,7 @@ annotation class ValidBurger(
 class BurgerValidator : ConstraintValidator<ValidBurger, Burger> {
 
     override fun isValid(burger: Burger, context: ConstraintValidatorContext?): Boolean {
-        if (burger.ingredients.size > 2) {
+        if (burger.ingredients.size >= 2) {
             var nrOfBuns = 0
             var nrOfMeat = 0
             burger.ingredients.forEach {
