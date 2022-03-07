@@ -38,7 +38,6 @@ Ingredients => http://[Your Host:Port]/ingredients
 
 ### Todo for this branch
 - Add HateOAS
-- Add Swagger examples to fix additionalProp issue
 - Optional: Secure non read Rest endpoint
 - Optional: Prepare instructions and try out deploying app in Docker
 

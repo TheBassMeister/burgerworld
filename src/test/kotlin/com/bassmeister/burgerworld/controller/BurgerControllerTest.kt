@@ -47,17 +47,16 @@ class BurgerControllerTest(@Autowired val mockMvc: MockMvc) {
     fun createNewBurger() {
         mockMvc.perform(
             post("/burgers").content(
-                "{\n" +
-                        "        \"name\": \"RestTest Burger\"," +
-                        "        \"isCustom\": true," +
-                        "        \"ingredients\": {" +
-                        "            \"REG_BUN\": 1," +
-                        "            \"BAC\": 2," +
-                        "            \"LETC\": 2," +
-                        "            \"CHIPO\": 3," +
-                        "            \"CH_PAT\": 1" +
-                        "        }" +
-                        "    }"
+                "{" +
+                        "\"name\": \"RestTest Burger\"," +
+                        "\"ingredients\": {" +
+                        "   \"REG_BUN\": 1," +
+                        "   \"BAC\": 2," +
+                        "   \"LETC\": 2," +
+                        "   \"CHIPO\": 3," +
+                        "   \"CH_PAT\": 1" +
+                        " }" +
+                        "}"
             ).contentType("application/json")
         ).andExpect(status().isCreated).andExpect(jsonPath("$.name", `is`("RestTest Burger")))
             .andExpect(jsonPath("$.ingredients", aMapWithSize<Ingredient, Int>(5)))
@@ -75,16 +74,15 @@ class BurgerControllerTest(@Autowired val mockMvc: MockMvc) {
     fun createBurgerWithoutBun() {
         mockMvc.perform(
             post("/burgers").content(
-                "{\n" +
-                        "        \"name\": \"The Bunless\"," +
-                        "        \"isCustom\": true," +
-                        "        \"ingredients\": {" +
-                        "            \"BAC\": 2," +
-                        "            \"LETC\": 2," +
-                        "            \"CHIPO\": 3," +
-                        "            \"CH_PAT\": 1" +
-                        "        }" +
-                        "    }"
+                "{" +
+                        "\"name\": \"The Bunless\"," +
+                        "\"ingredients\": {" +
+                        "   \"BAC\": 2," +
+                        "   \"LETC\": 2," +
+                        "   \"CHIPO\": 3," +
+                        "   \"CH_PAT\": 1" +
+                        " }" +
+                        "}"
             ).contentType("application/json")
         ).andExpect(status().isForbidden)
             .andExpect(jsonPath("$", `is`("A Burger must have one type of bun and at least one type of meat")))
@@ -95,14 +93,13 @@ class BurgerControllerTest(@Autowired val mockMvc: MockMvc) {
         val burgerName = "The Classic"
         mockMvc.perform(
             post("/burgers").content(
-                "{\n" +
-                        "        \"name\": \"$burgerName\"," +
-                        "        \"isCustom\": true," +
-                        "        \"ingredients\": {" +
-                        "            \"REG_BUN\": 1," +
-                        "            \"CH_PAT\": 1" +
-                        "        }" +
-                        "    }"
+                "{" +
+                        "\"name\": \"$burgerName\"," +
+                        "\"ingredients\": {" +
+                        "   \"REG_BUN\": 1," +
+                        "   \"CH_PAT\": 1" +
+                        " }" +
+                        "}"
             ).contentType("application/json")
         ).andExpect(status().isForbidden)
             .andExpect(jsonPath("$", `is`("Burger with name $burgerName already exists")))
@@ -118,17 +115,16 @@ class BurgerControllerTest(@Autowired val mockMvc: MockMvc) {
     fun deleteCustomBurger() {
         val postResult = mockMvc.perform(
             post("/burgers").content(
-                "{\n" +
-                        "        \"name\": \"Will be deleted burger\"," +
-                        "        \"isCustom\": true," +
-                        "        \"ingredients\": {" +
-                        "            \"REG_BUN\": 1," +
-                        "            \"BAC\": 2," +
-                        "            \"LETC\": 2," +
-                        "            \"CHIPO\": 3," +
-                        "            \"CH_PAT\": 1" +
-                        "        }" +
-                        "    }"
+                "{" +
+                        "\"name\": \"Will be deleted burger\"," +
+                        "\"ingredients\": {" +
+                        "   \"REG_BUN\": 1," +
+                        "   \"BAC\": 2," +
+                        "   \"LETC\": 2," +
+                        "   \"CHIPO\": 3," +
+                        "   \"CH_PAT\": 1" +
+                        " }" +
+                        "}"
             ).contentType("application/json")
         ).andExpect(status().isCreated).andReturn()
         val newBurgerId = JsonPath.read<Integer>(postResult.response.contentAsString, "$.id")

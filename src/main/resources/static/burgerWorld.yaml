@@ -1,0 +1,181 @@
+openapi: 3.0.0
+info:
+  title: Burgerworld API
+  description: This is the API of the burgerworld application
+  version: 0.1.9
+servers:
+  - url: http://localhost:8080
+    description: Replace this with the host and port you are using
+paths:
+  /burgers:
+    get:
+      summary: Returns a list of all Burgers
+      parameters:
+        - name: isCustom
+          in: query
+          required: false
+          description: If true only return custom made burgers
+          schema:
+            type: boolean
+      responses:
+        '200':    # status code
+          description: "All Burgers or empty list if no burgers can be found"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Burger"
+    post:
+      summary: "Creates a new Burger"
+      requestBody:
+        description: "Burger that should be added"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostBurger"
+      responses:
+        '201':
+          description: "The newly created Burger"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Burger"
+        '403':
+          description: "If the burger with given name already exists or is not a valid burger"
+
+  /burgers/{name}:
+    get:
+      summary: Returns a list of all Burgers
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Name of the Burger to read
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "Returns Burger with given name"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Burger"
+        '404':
+          description: "Burger with given name does not exist"
+  /burgers/{id}:
+    delete:
+      summary: Deletes Custom Burger with given id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the burger to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "If the burger was deleted or burger with given id doesn't exist"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Burger"
+        '403':
+          description: "If the burger with given id is not a custom burger"
+  /ingredients:
+    get:
+      summary: Returns a list of all Ingredients
+      parameters:
+        - name: type
+          in: query
+          required: false
+          description: "If type is set limits the type of ingredients of that type"
+          schema:
+            $ref: "#/components/schemas/IngredientType"
+      responses:
+        '200':    # status code
+          description: "All ingredients. If type is set all ingredients of given type or empty array if no ingredient of given type exists"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ingredient"
+  /ingredients/{id}:
+    get:
+      summary: Gets ingredient with given id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the ingredient to read
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "The content of ingredient with given id"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ingredient"
+        '404':
+          description: "If ingredient with given id does not exist"
+
+
+components:
+  schemas:
+    Burger:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        isCustom:
+          type: boolean
+        ingredients:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            "REG_BUN" : 1
+            "BAC": 2
+            "LETC": 2
+            "CHIPO": 3
+            "CH_PAT": 1
+        totalCost:
+          type: number
+          format: float
+          example: 5.29
+    PostBurger:
+      type: object
+      properties:
+        name:
+          type: string
+        ingredients:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            "REG_BUN" : 1
+            "BAC": 2
+            "LETC": 2
+            "CHIPO": 3
+            "CH_PAT": 1
+    Ingredient:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        cost:
+          type: number
+          format: float
+          example: 0.32
+        type:
+          $ref: "#/components/schemas/IngredientType"
+    IngredientType:
+      type: string
+      enum: [BUN,BURGER,VEGETABLE,SAUCE,OTHER]

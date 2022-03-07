@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/ingredients")
+@RequestMapping("/ingredients", produces = [APPLICATION_JSON_VALUE])
 class IngredientController(@Autowired val ingredientRepo: IngredientRepo) {
 
-    @GetMapping(produces = [APPLICATION_JSON_VALUE])
+    @GetMapping
     fun getAllIngredients(@RequestParam(required = false) type: String?): List<Ingredient> {
         return if (type == null) {
             ingredientRepo.findAll().toList()
@@ -30,7 +30,7 @@ class IngredientController(@Autowired val ingredientRepo: IngredientRepo) {
         }
     }
 
-    @GetMapping("/{id}", produces = [APPLICATION_JSON_VALUE])
+    @GetMapping("/{id}")
     fun getIngredientById(@PathVariable id: String): ResponseEntity<Ingredient> {
         val ingredient = ingredientRepo.findById(id)
         return if (ingredient.isPresent) {

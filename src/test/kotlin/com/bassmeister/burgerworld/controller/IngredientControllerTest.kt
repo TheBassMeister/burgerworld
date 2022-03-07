@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @AutoConfigureMockMvc
 class IngredientControllerTest(@Autowired val mockMvc: MockMvc) {
 
+
     @Test
     fun getAllIngredients() {
         mockMvc.perform(get("/ingredients")).andExpect(status().isOk).andExpect(jsonPath("$").isArray)

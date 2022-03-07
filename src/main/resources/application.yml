@@ -9,3 +9,8 @@ spring:
     hibernate:
       ddl-auto: update
     defer-datasource-initialization: true
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+      url: /burgerWorld.yaml

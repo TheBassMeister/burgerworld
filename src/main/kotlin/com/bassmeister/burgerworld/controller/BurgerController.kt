@@ -2,6 +2,11 @@ package com.bassmeister.burgerworld.controller
 
 import com.bassmeister.burgerworld.model.Burger
 import com.bassmeister.burgerworld.repo.BurgerRepo
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ExampleObject
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
@@ -41,6 +46,7 @@ class BurgerController(@Autowired val burgerRepo: BurgerRepo) {
         if (burgerRepo.getBurgerByName(burger.name).isPresent) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Burger with name ${burger.name} already exists")
         }
+        burger.isCustom=true
         val newBurger = burgerRepo.save(burger)
         return ResponseEntity(newBurger, HttpStatus.CREATED)
     }

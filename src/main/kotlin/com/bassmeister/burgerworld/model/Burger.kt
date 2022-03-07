@@ -16,8 +16,8 @@ data class Burger(
     val id: Long,
     @NotNull @Column(unique = true)
     val name: String,
-    @Column(columnDefinition = "boolean default false")
-    val isCustom: Boolean,
+    @Column(columnDefinition = "boolean default false") @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    var isCustom: Boolean,
     @ElementCollection
     @CollectionTable(
         name = "burger_ingredients",
