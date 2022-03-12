@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -38,7 +39,7 @@ class BurgerController(@Autowired val burgerRepo: BurgerRepo) {
         }
     }
 
-    @PostMapping(consumes = ["application/json"])
+    @PostMapping(consumes = ["application/json"]) @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     fun createNewBurger(@Valid @RequestBody burger: Burger, bindingResult: BindingResult): ResponseEntity<Any> {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(bindingResult.allErrors[0].defaultMessage)
@@ -51,7 +52,7 @@ class BurgerController(@Autowired val burgerRepo: BurgerRepo) {
         return ResponseEntity(newBurger, HttpStatus.CREATED)
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun deleteBurger(@PathVariable id: Long): ResponseEntity<String> {
         val burger = burgerRepo.findById(id)
         return if (burger.isEmpty) {

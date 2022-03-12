@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
@@ -21,7 +22,7 @@ class BurgerControllerTest(@Autowired val mockMvc: MockMvc) {
     fun getAllBurgers() {
         mockMvc.perform(get("/burgers")).andExpect(status().isOk).andExpect(
             jsonPath("$").isArray
-        ).andExpect(jsonPath("$", hasSize<Ingredient>(3)))
+        ).andExpect(status().isOk)
     }
 
     @Test
@@ -44,6 +45,7 @@ class BurgerControllerTest(@Autowired val mockMvc: MockMvc) {
     }
 
     @Test
+    @WithMockUser
     fun createNewBurger() {
         mockMvc.perform(
             post("/burgers").content(
@@ -71,6 +73,7 @@ class BurgerControllerTest(@Autowired val mockMvc: MockMvc) {
     }
 
     @Test
+    @WithMockUser
     fun createBurgerWithoutBun() {
         mockMvc.perform(
             post("/burgers").content(
@@ -89,6 +92,7 @@ class BurgerControllerTest(@Autowired val mockMvc: MockMvc) {
     }
 
     @Test
+    @WithMockUser
     fun createBurgerWithExistingName() {
         val burgerName = "The Classic"
         mockMvc.perform(
@@ -106,12 +110,14 @@ class BurgerControllerTest(@Autowired val mockMvc: MockMvc) {
     }
 
     @Test
+    @WithMockUser(roles = ["ADMIN"])
     fun deleteNonCustomBurger() {
         mockMvc.perform(delete("/burgers/1")).andExpect(status().isForbidden)
             .andExpect(jsonPath("$", `is`("Only custom Burgers can be deleted")))
     }
 
     @Test
+    @WithMockUser(roles = ["ADMIN"])
     fun deleteCustomBurger() {
         val postResult = mockMvc.perform(
             post("/burgers").content(
@@ -136,4 +142,63 @@ class BurgerControllerTest(@Autowired val mockMvc: MockMvc) {
             "Burger was not deleted"
         )
     }
+
+    @Test
+    @WithMockUser(roles = ["TEST_USER"])
+    fun onlyUsersCanCreateBurgers() {
+        mockMvc.perform(
+            post("/burgers").content(
+                "{" +
+                        "\"name\": \"The Forbidden Burger\"," +
+                        "\"ingredients\": {" +
+                        "   \"REG_BUN\": 1," +
+                        "   \"BAC\": 2," +
+                        "   \"LETC\": 2," +
+                        "   \"CHIPO\": 3," +
+                        "   \"CH_PAT\": 1" +
+                        " }" +
+                        "}"
+            ).contentType("application/json")
+        ).andExpect(status().isForbidden)
+    }
+
+    @Test
+    fun mustBeLoggedInToCreateBurgers() {
+        mockMvc.perform(
+            post("/burgers").content(
+                "{" +
+                        "\"name\": \"The Unlogged one\"," +
+                        "\"ingredients\": {" +
+                        "   \"REG_BUN\": 1," +
+                        "   \"BAC\": 2," +
+                        "   \"LETC\": 2," +
+                        "   \"CHIPO\": 3," +
+                        "   \"CH_PAT\": 1" +
+                        " }" +
+                        "}"
+            ).contentType("application/json")
+        ).andExpect(status().isUnauthorized)
+    }
+
+    @Test
+    @WithMockUser
+    fun onlyAdminsCanDeleteBurgers() {
+        val postResult = mockMvc.perform(
+            post("/burgers").content(
+                "{" +
+                        "\"name\": \"Cannot be Deleted Burger\"," +
+                        "\"ingredients\": {" +
+                        "   \"REG_BUN\": 1," +
+                        "   \"BAC\": 2," +
+                        "   \"LETC\": 2," +
+                        "   \"CHIPO\": 3," +
+                        "   \"CH_PAT\": 1" +
+                        " }" +
+                        "}"
+            ).contentType("application/json")
+        ).andExpect(status().isCreated).andReturn()
+        val newBurgerId = JsonPath.read<Integer>(postResult.response.contentAsString, "$.id")
+        mockMvc.perform(delete("/burgers/$newBurgerId")).andExpect(status().isForbidden)
+    }
+
 }
