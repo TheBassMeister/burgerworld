@@ -28,6 +28,8 @@ paths:
                   $ref: "#/components/schemas/Burger"
     post:
       summary: "Creates a new Burger"
+      security:
+        - basicAuth: [write]
       requestBody:
         description: "Burger that should be added"
         required: true
@@ -44,6 +46,8 @@ paths:
                 $ref: "#/components/schemas/Burger"
         '403':
           description: "If the burger with given name already exists or is not a valid burger"
+        '401':
+          description: "If authorization fails or was not provided"
 
   /burgers/{name}:
     get:
@@ -67,6 +71,8 @@ paths:
   /burgers/{id}:
     delete:
       summary: Deletes Custom Burger with given id
+      security:
+        - basicAuth: [delete]
       parameters:
         - name: id
           in: path
@@ -83,6 +89,8 @@ paths:
                 $ref: "#/components/schemas/Burger"
         '403':
           description: "If the burger with given id is not a custom burger"
+        '401':
+          description: "If authorization fails or was not provided"
   /ingredients:
     get:
       summary: Returns a list of all Ingredients
@@ -179,3 +187,7 @@ components:
     IngredientType:
       type: string
       enum: [BUN,BURGER,VEGETABLE,SAUCE,OTHER]
+  securitySchemes:
+    basicAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic

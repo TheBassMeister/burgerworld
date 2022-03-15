@@ -32,14 +32,12 @@ to the DB during testing, will be gone on a restart.
 The tests are running using the in-memory H2 database. A MySql database connection will not be needed.
 
 ### Rest Endpoints
-Swagger => http://[Your Host:Port]/swagger-ui/index.html
-Burgers => http://[Your Host:Port]/burgers
-Ingredients => http://[Your Host:Port]/ingredients
+- Swagger => http://[Your Host:Port]/swagger-ui/index.html
+- Burgers => http://[Your Host:Port]/burgers
+- Ingredients => http://[Your Host:Port]/ingredients
 
 ### Todo for this branch
-- Add HateOAS
-- Optional: Secure non read Rest endpoint
-- Optional: Prepare instructions and try out deploying app in Docker
+Prepare instructions and try out deploying app in Docker
 
 
 
