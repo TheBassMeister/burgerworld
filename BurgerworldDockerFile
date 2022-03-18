@@ -1,0 +1,6 @@
+FROM amazoncorretto:11-alpine-jdk
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+ARG JAR_FILE=target/burgerworld-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} burgerworld.jar
+ENTRYPOINT ["java","-Dspring.datasource.url=jdbc:mysql://host.docker.internal:3308/burgerworld", "-Dspring.profiles.active=dev", "-jar","/burgerworld.jar"]

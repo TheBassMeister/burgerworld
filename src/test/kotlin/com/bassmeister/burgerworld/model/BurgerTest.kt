@@ -1,4 +1,4 @@
-package com.bassmeister.burgerworld
+package com.bassmeister.burgerworld.model
 
 import com.bassmeister.burgerworld.model.Burger
 import com.bassmeister.burgerworld.model.Ingredient
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import java.math.BigDecimal
 import javax.validation.ConstraintViolationException
 
 
@@ -20,9 +21,9 @@ class BurgerTest(@Autowired val burgerRepo: BurgerRepo, @Autowired val ingredien
 
     @Test
     fun getChickenBaconMaster() {
-        val burger = burgerRepo.getBurgerByName("Chicken Bacon Master")
+        val burger = burgerRepo.getBurgerByName("Chicken Bacon Master").get()
         assertNotNull(burger, "Could not find Chicken Bacon Master")
-        assertEquals(5.94, burger.getTotalCost(), 0.01)
+        assertEquals(BigDecimal.valueOf(5.94), burger.getTotalCost())
         val ingredients = burger.ingredients
         assertThat(ingredients, IsMapContaining.hasEntry(ingredientRepo.findById("REG_BUN").get(), 1))
         assertThat(ingredients, IsMapContaining.hasEntry(ingredientRepo.findById("CH_PAT").get(), 1))
@@ -46,10 +47,10 @@ class BurgerTest(@Autowired val burgerRepo: BurgerRepo, @Autowired val ingredien
         val burger = Burger(0, "McTest", true, ingredients)
         burgerRepo.save(burger)
 
-        val afterSave = burgerRepo.getBurgerByName("McTest")
+        val afterSave = burgerRepo.getBurgerByName("McTest").get()
         assertNotNull(afterSave, "New Burger was not persisted")
         assertTrue(afterSave.isCustom);
-        assertEquals(8.53, afterSave.getTotalCost(), 0.01)
+        assertEquals(BigDecimal.valueOf(8.54), afterSave.getTotalCost())
     }
 
     @Test

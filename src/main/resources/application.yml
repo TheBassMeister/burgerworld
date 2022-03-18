@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3308/burgerworld
+    username: root
+    password: pass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL8Dialect
+    defer-datasource-initialization: true
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    url: /burgerWorld.yaml
