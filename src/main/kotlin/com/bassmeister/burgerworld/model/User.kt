@@ -5,7 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
 
-@Entity
+@Entity(name="BurgerworldUser")
 class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val userId: Long,

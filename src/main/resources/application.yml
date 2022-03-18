@@ -8,9 +8,10 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL8Dialect
     defer-datasource-initialization: true
 springdoc:
   api-docs:
     enabled: false
   swagger-ui:
-      url: /burgerWorld.yaml
+    url: /burgerWorld.yaml
