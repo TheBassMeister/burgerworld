@@ -6,6 +6,7 @@ import com.bassmeister.burgerworld.model.User
 import com.bassmeister.burgerworld.repo.BurgerRepo
 import com.bassmeister.burgerworld.repo.IngredientRepo
 import com.bassmeister.burgerworld.repo.UserRepo
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
@@ -17,8 +18,11 @@ import org.springframework.security.crypto.password.PasswordEncoder
 @Profile("dev")
 class BurgerWorldInitializer {
 
+    private val logger = KotlinLogging.logger {}
+
     @Bean
     fun createTestUser(@Autowired userRepo: UserRepo, @Autowired pwEncoder: PasswordEncoder): CommandLineRunner {
+        logger.info { "Starting to create the test users" }
         return CommandLineRunner {
             val adminUser = User(
                 0,
@@ -43,6 +47,7 @@ class BurgerWorldInitializer {
     @Autowired
     fun createBurgers(burgerRepo: BurgerRepo, ingredientRepo: IngredientRepo): CommandLineRunner {
         return CommandLineRunner {
+            logger.info { "Starting to create the test burgers" }
             val cbm = burgerRepo.getBurgerByName("Chicken Bacon Master")
             if (!cbm.isPresent) {
                 val cbmIngredients = HashMap<Ingredient, Int>()

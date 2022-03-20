@@ -12,5 +12,4 @@ class IngredientDeserializer(@Autowired val ingredientRepo: IngredientRepo) : Ke
         return ingredientRepo.findById(ingredientString).get()
     }
 
-
 }

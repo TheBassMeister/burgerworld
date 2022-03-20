@@ -10,5 +10,4 @@ class IngredientSerializer : JsonSerializer<Ingredient>() {
         gen.writeFieldName(ingredient.id)
     }
 
-
 }
