@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
+@CrossOrigin
 @RequestMapping("/burgers", produces = [APPLICATION_JSON_VALUE])
 class BurgerController(@Autowired val burgerRepo: BurgerRepo) {
 

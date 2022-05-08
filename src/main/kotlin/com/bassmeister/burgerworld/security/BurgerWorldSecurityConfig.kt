@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 class BurgerWorldSecurityConfig(@Autowired val userDetailsService: UserDetailsService) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
-        http.csrf().disable()
+        http.cors().and().csrf().disable()
             .httpBasic()
             .and().authorizeRequests().antMatchers("/**").permitAll()
     }

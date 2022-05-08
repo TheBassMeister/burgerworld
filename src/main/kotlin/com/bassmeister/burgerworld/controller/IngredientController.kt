@@ -16,6 +16,7 @@ class IngredientController(@Autowired val ingredientRepo: IngredientRepo) {
 
     private val logger = KotlinLogging.logger {}
 
+    @CrossOrigin
     @GetMapping
     fun getAllIngredients(@RequestParam(required = false) type: String?): List<Ingredient> {
         return if (type == null) {
