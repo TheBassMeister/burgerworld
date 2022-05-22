@@ -24,22 +24,27 @@ class BurgerWorldInitializer {
     fun createTestUser(@Autowired userRepo: UserRepo, @Autowired pwEncoder: PasswordEncoder): CommandLineRunner {
         logger.info { "Starting to create the test users" }
         return CommandLineRunner {
-            val adminUser = User(
-                0,
-                "root",
-                pwEncoder.encode("pass"),
-                true,
-                listOf("ROLE_USER", "ROLE_ADMIN")
-            )
-            userRepo.save(adminUser)
-            val regularUser = User(
-                0,
-                "Ronald",
-                pwEncoder.encode("King Burger"),
-                true,
-                listOf("ROLE_USER")
-            )
-            userRepo.save(regularUser)
+            if (!userRepo.findUserByUserName("root").isPresent) {
+                val adminUser = User(
+                    0,
+                    "root",
+                    pwEncoder.encode("pass"),
+                    true,
+                    listOf("ROLE_USER", "ROLE_ADMIN")
+                )
+                userRepo.save(adminUser)
+            }
+            if (!userRepo.findUserByUserName("Ronald").isPresent) {
+                val regularUser = User(
+                    0,
+                    "Ronald",
+                    pwEncoder.encode("King Burger"),
+                    true,
+                    listOf("ROLE_USER")
+                )
+                userRepo.save(regularUser)
+            }
+
         }
     }
 
